@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 // ------------------------------------------------------------------
 // this class implements window focus listening
 // ------------------------------------------------------------------
-public class GUI extends JFrame
+public class GUI extends JFrame implements DocumentListener
 {
     public GUI (Application application)
     {
@@ -22,7 +22,20 @@ public class GUI extends JFrame
 
         // ------------------------------------------------------------------
         // register this object to listen to window focus events
-        addWindowFocusListener (this.obj);
+        Obj obj = new Obj() {
+            @Override
+            public void windowGainedFocus(WindowEvent e) {
+                application.hasFocus = true;
+                showFocus();
+            }
+
+            @Override
+            public void windowLostFocus(WindowEvent e) {
+                application.hasFocus = false;
+                showFocus();
+            }
+        };
+        addWindowFocusListener (obj);
         // ------------------------------------------------------------------
 
         menuBar = new JMenuBar ();
@@ -40,19 +53,7 @@ public class GUI extends JFrame
         // ------------------------------------------------------------------
         // adding a listener: anonymous inner class implementing methods
         // of DocumentListener
-        textField.getDocument ().addDocumentListener (new DocumentListener () {
-            public void insertUpdate (DocumentEvent e)
-            {
-                updateTextLength ();
-            }
-            public void removeUpdate (DocumentEvent e)
-            {
-                updateTextLength ();
-            }
-            public void changedUpdate (DocumentEvent e)
-            {
-            }
-        });
+        textField.getDocument().addDocumentListener(this);
         // ------------------------------------------------------------------
 
         // a label for showing whether focus is in or out
@@ -68,19 +69,6 @@ public class GUI extends JFrame
         setVisible (true);
     }
 
-    Obj obj = new Obj() {
-        @Override
-        public void windowGainedFocus(WindowEvent e) {
-            application.hasFocus = true;
-            showFocus();
-        }
-
-        @Override
-        public void windowLostFocus(WindowEvent e) {
-            application.hasFocus = false;
-            showFocus();
-        }
-    };
     // ------------------------------------------------------------------
 
     public void updateTextLength ()
@@ -103,4 +91,18 @@ public class GUI extends JFrame
     private JMenuBar menuBar;
     private JLabel focusLabel, textLengthLabel;
     private JTextField textField;
+
+    @Override
+    public void insertUpdate(DocumentEvent e) {
+        updateTextLength();
+    }
+
+    @Override
+    public void removeUpdate(DocumentEvent e) {
+        updateTextLength();
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent e) { }
+
 }
