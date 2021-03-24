@@ -9,9 +9,6 @@ import java.awt.event.WindowFocusListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-// ------------------------------------------------------------------
-// this class implements window focus listening
-// ------------------------------------------------------------------
 public class GUI extends JFrame implements DocumentListener
 {
     public GUI (Application application)
@@ -20,8 +17,7 @@ public class GUI extends JFrame implements DocumentListener
         this.application = application;
         setSize (400, 300);
 
-        // ------------------------------------------------------------------
-        // register this object to listen to window focus events
+
         Obj obj = new Obj() {
             @Override
             public void windowGainedFocus(WindowEvent e) {
@@ -36,7 +32,6 @@ public class GUI extends JFrame implements DocumentListener
             }
         };
         addWindowFocusListener (obj);
-        // ------------------------------------------------------------------
 
         menuBar = new JMenuBar ();
         JMenu fileMenu = new JMenu ("File");
@@ -47,29 +42,21 @@ public class GUI extends JFrame implements DocumentListener
         menuBar.add (fileMenu);
         setJMenuBar (menuBar);
 
-        // text field
+
         textField = new JTextField (10);
         add (textField, BorderLayout.CENTER);
-        // ------------------------------------------------------------------
-        // adding a listener: anonymous inner class implementing methods
-        // of DocumentListener
-        textField.getDocument().addDocumentListener(this);
-        // ------------------------------------------------------------------
 
-        // a label for showing whether focus is in or out
+        textField.getDocument().addDocumentListener(this);
         focusLabel = new JLabel ();
         showFocus ();
         add (focusLabel, BorderLayout.PAGE_START);
 
-        // a label for showing length of text
         textLengthLabel = new JLabel ();
         showTextLength ();
         add (textLengthLabel, BorderLayout.PAGE_END);
 
         setVisible (true);
     }
-
-    // ------------------------------------------------------------------
 
     public void updateTextLength ()
     {
